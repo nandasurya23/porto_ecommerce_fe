@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 0 0% 100%;
+  --bg-elevated: 0 0% 100%;
+  --fg: 220 35% 11%;
+  --fg-muted: 220 10% 38%;
+  --card: 0 0% 100%;
+  --card-strong: 220 14% 97%;
+  --border: 220 11% 90%;
+  --border-strong: 220 9% 82%;
+  --muted: 220 14% 96%;
+  --muted-strong: 220 12% 93%;
+  --accent: 0 0% 97%;
+  --primary: 220 35% 11%;
+  --primary-foreground: 0 0% 100%;
+  --danger: 0 72% 45%;
+  --success: 142 72% 28%;
+  --warning: 38 92% 38%;
+  --info: 217 91% 56%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: hsl(var(--bg));
+  color: hsl(var(--fg));
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.container-shell {
+  width: min(1840px, calc(100% - 4rem));
+  margin-inline: auto;
+}
+
+.section-surface {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  box-shadow: none;
+}
+
+.surface-muted {
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+}
+
+.hero-panel {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  box-shadow: none;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+}
+
+.soft-divider {
+  border-top: 1px solid hsl(var(--border));
+}
+
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.page-eyebrow {
+  margin: 0 0 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: hsl(220 10% 38%);
+}
+
+.page-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 3.1rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.page-description {
+  margin: 0.5rem 0 0;
+  max-width: 60ch;
+  color: hsl(var(--fg-muted));
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.kpi-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
