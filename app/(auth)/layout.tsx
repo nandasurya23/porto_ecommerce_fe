@@ -2,16 +2,20 @@
 
 import type * as React from "react";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth-store";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { appName } from "@/constants/theme";
-import { ArrowRight, ShoppingBag, ShieldCheck, Sparkles } from "lucide-react";
+import { LoadingAuthSkeleton } from "@/components/ui/loading-skeletons";
+import { Building2 } from "lucide-react";
+
+const AUTH_HERO_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDPG97joOvnsJmKXW_R3FLoRzSXuz4wHzfiF4171vWwCodGwcF2415Xgwi2sc1A1z0vrtthjKv7aVWeeua3klCV5cGVh2sYQqDt0nQBpHNlKej8JXccsUELKpy0CU-oP0ycCkUqVA3D2Zl7naSaKWsAEYuzF-KJLQpqZWkEvux8BUaQqM79CKSzEYLLNStYRwiexENKBBZS0dw1-X6EKXVn2tVkaumC0SzxdbbzLuDkTG1lTYfz2kyQ2jA-nFc6HAezn1YMA2gBeho";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }): React.JSX.Element | null {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, hydrated } = useAuthStore();
+  const isRegister = pathname.startsWith("/register");
 
   useEffect(() => {
     if (hydrated && user) {
@@ -20,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }):
   }, [hydrated, router, user]);
 
   if (!hydrated) {
-    return <div className="container-shell py-10 text-sm text-fg-muted">Loading...</div>;
+    return <LoadingAuthSkeleton />;
   }
 
   if (user) {
@@ -28,72 +32,57 @@ export default function AuthLayout({ children }: { children: React.ReactNode }):
   }
 
   return (
-    <div className="flex min-h-screen items-center px-4 py-10">
-      <div className="container-shell grid w-full gap-6 lg:grid-cols-[1.08fr_0.92fr]">
-        <section className="hero-panel overflow-hidden">
-          <div className="grid min-h-full gap-8 p-6 sm:p-8 lg:p-10">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-[0_16px_30px_rgba(15,23,42,0.16)]">
-                <span className="text-lg font-black">F</span>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-fg-muted">Footwear operations</p>
-                <p className="text-lg font-semibold">{appName}</p>
-              </div>
+    <div className="min-h-screen bg-surface-container-lowest lg:flex">
+      <section className="relative hidden overflow-hidden bg-surface-container lg:flex lg:w-1/2">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          aria-hidden="true"
+          style={{ backgroundImage: `url('${AUTH_HERO_IMAGE}')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full p-10">
+          <div className="max-w-md space-y-5 text-white">
+            <h1 className="text-[clamp(3.2rem,5vw,4.5rem)] font-black tracking-[-0.04em] text-white">
+              {appName}
+            </h1>
+            <p className="max-w-md text-[15px] leading-7 text-white/90">
+              Precision logistics for premium footwear. Secure, scalable, and beautifully engineered.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="flex min-h-screen w-full items-center justify-center bg-surface-container-lowest px-4 py-8 sm:px-6 lg:w-1/2 lg:px-10 lg:py-12">
+        <div className="w-full max-w-[560px] space-y-8">
+          <div className="flex items-center gap-3 lg:hidden">
+            <div className="flex h-11 w-11 items-center justify-center rounded-sm border border-border-strong bg-slate-950 text-white">
+              <Building2 className="h-5 w-5" />
             </div>
-            <div className="space-y-4">
-              <Badge tone="accent" className="w-fit">
-                Storefront + operations
-              </Badge>
-              <h1 className="max-w-xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl">
-                Retail-grade shopping UI for customers, admins, and warehouse teams.
-              </h1>
-              <p className="max-w-xl text-sm leading-7 text-fg-muted sm:text-base">
-                Sign in to manage shopping, orders, inventory, payments, and fulfillment in one polished workspace.
-              </p>
-            </div>
-            <div className="grid gap-3 border-t border-border pt-6 text-sm text-fg-muted sm:grid-cols-3">
-              <Feature icon={<ShoppingBag className="h-4 w-4" />} label="Customer flow" description="Shop, cart, checkout, track." />
-              <Feature icon={<Sparkles className="h-4 w-4" />} label="Admin ops" description="Products, inventory, payments." />
-              <Feature icon={<ShieldCheck className="h-4 w-4" />} label="Warehouse" description="Pack, ship, update tracking." />
-            </div>
-            <div className="grid gap-3 rounded-2xl border border-border bg-white/70 p-4 text-sm text-fg-muted sm:grid-cols-2">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-fg">Optimized for speed</p>
-                <p className="mt-1 leading-6">Cleaner hierarchy, faster scanning, fewer distractions.</p>
-              </div>
-              <div className="flex items-center justify-between rounded-2xl bg-slate-950 px-4 py-3 text-white">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.16em] text-white/70">Checkout first</p>
-                  <p className="text-sm font-semibold">Modern commerce flow</p>
-                </div>
-                <ArrowRight className="h-4 w-4" />
-              </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-fg-muted">Footwear operations</p>
+              <p className="text-lg font-semibold text-slate-950">{appName}</p>
             </div>
           </div>
-        </section>
-        <div className="mx-auto w-full max-w-md lg:max-w-none">
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <CardTitle>Access account</CardTitle>
-              <CardDescription>Masuk atau daftar untuk mengakses platform.</CardDescription>
-            </CardHeader>
-            <CardContent>{children}</CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-function Feature({ icon, label, description }: { icon: React.ReactNode; label: string; description: string }): React.JSX.Element {
-  return (
-    <div className="space-y-2 rounded-2xl border border-border bg-white/70 p-4">
-      <div className="flex items-center gap-2 text-slate-950">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-950 text-white">{icon}</span>
-        <p className="font-semibold">{label}</p>
-      </div>
-      <p className="text-sm leading-6 text-fg-muted">{description}</p>
+          <div className="space-y-3 text-center lg:text-left">
+            <div className="flex items-center justify-center gap-3 lg:justify-start">
+              <div className="flex h-12 w-12 items-center justify-center rounded-sm border border-border-strong bg-slate-950 text-white">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <h2 className="font-sans text-[clamp(2rem,3vw,2.75rem)] font-bold tracking-[-0.05em] text-slate-950">
+                {isRegister ? "Register" : "Log In"}
+              </h2>
+            </div>
+            <p className="mx-auto max-w-xl text-[15px] leading-7 text-slate-600 lg:mx-0">
+              {isRegister
+                ? "Create your account to browse products, checkout, and track orders."
+                : "Welcome back. Enter your credentials to access the operational dashboard."}
+            </p>
+          </div>
+
+          <div className="w-full">{children}</div>
+        </div>
+      </section>
     </div>
   );
 }

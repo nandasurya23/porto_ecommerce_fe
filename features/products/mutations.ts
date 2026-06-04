@@ -5,6 +5,7 @@ import {
   archiveProductRequest,
   createProductRequest,
   createVariantRequest,
+  permanentlyDeleteProductRequest,
   updateProductRequest,
   updateVariantRequest,
   uploadProductImageRequest,
@@ -113,6 +114,17 @@ export function useArchiveProductMutation() {
 
   return useMutation({
     mutationFn: async (productId: string) => archiveProductRequest(productId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+}
+
+export function usePermanentDeleteProductMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (productId: string) => permanentlyDeleteProductRequest(productId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["products"] });
     },

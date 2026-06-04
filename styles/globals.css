@@ -53,8 +53,26 @@ textarea {
 }
 
 .container-shell {
-  width: min(1840px, calc(100% - 4rem));
+  width: min(1440px, calc(100% - 1.5rem));
   margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .container-shell {
+    width: min(1440px, calc(100% - 2rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-shell {
+    width: min(1440px, calc(100% - 3rem));
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-shell {
+    width: min(1440px, calc(100% - 4rem));
+  }
 }
 
 .section-surface {

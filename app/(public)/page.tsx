@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, ShieldCheck, Sparkles } from "lucide-react";
 import { useFeaturedProductsQuery } from "@/features/products/queries";
-import { LoadingState } from "@/components/ui/loading-state";
+import { LoadingGridSkeleton } from "@/components/ui/loading-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { formatCurrency } from "@/lib/format";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
@@ -22,7 +22,7 @@ export default function HomePage(): React.JSX.Element {
 
   return (
     <div className="space-y-0">
-      <section className="relative min-h-[700px] w-full overflow-hidden border-b border-border bg-[#f5b33e] lg:h-[819px]">
+      <section className="relative min-h-[620px] w-full overflow-hidden border-b border-border bg-[#f5b33e] sm:min-h-[680px] lg:min-h-[819px]">
         <div className="absolute inset-0">
           <Image
             src={HERO_IMAGE}
@@ -38,12 +38,12 @@ export default function HomePage(): React.JSX.Element {
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#c17d1a]/28" />
         </div>
 
-        <div className="container-shell relative z-10 flex h-full min-h-[700px] items-center lg:h-[819px]">
-          <div className="max-w-[610px] pt-10 sm:pt-14">
-            <p className="mb-4 w-fit border-b-2 border-orange-600 pb-1 text-[11px] font-bold uppercase tracking-[0.26em] text-slate-700">
-              Spring Collection 2024
+        <div className="container-shell relative z-10 flex min-h-[620px] items-end py-12 sm:min-h-[680px] sm:items-center sm:py-16 lg:min-h-[819px]">
+          <div className="max-w-[610px] pb-2 pt-20 sm:pb-0 sm:pt-14">
+            <p className="mb-4 w-fit border-b-2 border-orange-600 pb-1 text-[10px] font-bold uppercase tracking-[0.24em] text-slate-700 sm:text-[11px] sm:tracking-[0.26em]">
+              Summer Collection 2026
             </p>
-            <h1 className="max-w-[560px] lg:max-w-[620px] text-[clamp(3.5rem,6vw,7rem)] font-black leading-[0.82] tracking-[-0.108em] text-slate-950">
+            <h1 className="max-w-[560px] text-[clamp(2.9rem,12vw,7rem)] font-black leading-[0.86] tracking-[-0.09em] text-slate-950 lg:max-w-[620px] lg:text-[clamp(3.5rem,6vw,7rem)] lg:leading-[0.82] lg:tracking-[-0.108em]">
               Engineered for
               <br />
               Precision.
@@ -52,19 +52,19 @@ export default function HomePage(): React.JSX.Element {
               <br />
               Motion.
             </h1>
-            <p className="mt-8 max-w-[560px] text-[17px] leading-8 text-slate-700">
+            <p className="mt-6 max-w-[560px] text-[15px] leading-7 text-slate-700 sm:mt-8 sm:text-[17px] sm:leading-8">
               Discover our latest arrival of high-performance footwear, blending a clean editorial storefront with uncompromising urban aesthetics.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row">
               <Link
                 href="/products"
-                className="inline-flex h-14 items-center justify-center rounded-none bg-orange-600 px-10 text-[15px] font-bold uppercase tracking-wide text-white transition hover:bg-orange-700"
+                className="inline-flex h-12 items-center justify-center rounded-none bg-orange-600 px-6 text-[13px] font-bold uppercase tracking-wide text-white transition hover:bg-orange-700 sm:h-14 sm:px-10 sm:text-[15px]"
               >
                 Shop Collection
               </Link>
               <Link
                 href="/products"
-                className="inline-flex h-14 items-center justify-center rounded-none bg-slate-950 px-10 text-[15px] font-bold uppercase tracking-wide text-white transition hover:bg-slate-800"
+                className="inline-flex h-12 items-center justify-center rounded-none bg-slate-950 px-6 text-[13px] font-bold uppercase tracking-wide text-white transition hover:bg-slate-800 sm:h-14 sm:px-10 sm:text-[15px]"
               >
                 View Lookbook
               </Link>
@@ -78,10 +78,10 @@ export default function HomePage(): React.JSX.Element {
       <section id="new-arrivals" className="container-shell">
         <SectionHeader title="New Arrivals" subtitle="Latest operational drops." actionLabel="View All" actionHref="/products" />
         <div className="mt-5">
-          {isLoading ? <LoadingState /> : null}
+          {isLoading ? <LoadingGridSkeleton items={4} /> : null}
           {isError ? <ErrorState message="Gagal mengambil produk unggulan." onRetry={() => void refetch()} /> : null}
           {data ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {newArrivals.map((product) => (
                 <ArrivalCard key={product.id} product={product} />
               ))}
@@ -94,7 +94,7 @@ export default function HomePage(): React.JSX.Element {
 
       <section id="collections" className="container-shell">
         <div className="mb-5 border-b border-border pb-4">
-          <h2 className="text-[2rem] font-semibold tracking-[-0.05em] text-slate-950">Shop by Category</h2>
+          <h2 className="text-[1.6rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[2rem]">Shop by Category</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2 md:h-[600px]">
           <CategoryTile
@@ -119,11 +119,11 @@ export default function HomePage(): React.JSX.Element {
 
       <section className="border-y border-border bg-[#f1f3f5] py-16">
         <div className="container-shell">
-          <div className="mb-12 text-center">
-            <h2 className="text-[2rem] font-semibold tracking-[-0.05em] text-slate-950">Why Kinetic Ops</h2>
+          <div className="mb-10 text-center sm:mb-12">
+            <h2 className="text-[1.6rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[2rem]">Why Kinetic Ops</h2>
             <p className="mt-2 text-sm text-slate-500">Operational excellence engineered into every step of our process.</p>
           </div>
-          <div className="grid gap-12 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-3 md:gap-12">
             <ValueProp
               icon={<Truck className="h-8 w-8" />}
               title="Fast Shipping Logistics"
@@ -160,13 +160,13 @@ function SectionHeader({
   actionHref?: string;
 }): React.JSX.Element {
   return (
-    <div className="flex items-end justify-between gap-4 border-b border-border-muted pb-4">
+    <div className="flex flex-col gap-3 border-b border-border-muted pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
       <div>
-        <h2 className="text-[2rem] font-semibold tracking-[-0.05em] text-slate-950">{title}</h2>
+        <h2 className="text-[1.6rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[2rem]">{title}</h2>
         {subtitle ? <p className="text-sm text-slate-500">{subtitle}</p> : null}
       </div>
       {actionLabel && actionHref ? (
-        <Link href={actionHref} className="inline-flex items-center gap-1 text-sm font-medium text-slate-950 transition hover:text-orange-600">
+        <Link href={actionHref} className="inline-flex items-center gap-1 text-sm font-medium text-slate-950 transition hover:text-orange-600 sm:self-end">
           {actionLabel}
           <ArrowRight className="h-4 w-4" />
         </Link>
@@ -257,9 +257,9 @@ function CategoryTile({
             </div>
           )}
           <div className={`absolute inset-0 ${dark ? "bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" : "bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"}`} />
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-            <h3 className="text-[2rem] font-semibold tracking-[-0.05em]">{title}</h3>
-            <p className="mt-2 inline-flex items-center gap-1 border-b border-white pb-1 text-xs font-semibold uppercase tracking-[0.2em]">
+          <div className="absolute bottom-0 left-0 right-0 p-5 text-white sm:p-6">
+            <h3 className="text-[1.6rem] font-semibold tracking-[-0.05em] sm:text-[2rem]">{title}</h3>
+            <p className="mt-2 inline-flex items-center gap-1 border-b border-white pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] sm:text-xs sm:tracking-[0.2em]">
               {subtitle}
               <ArrowRight className="h-3.5 w-3.5" />
             </p>
@@ -281,10 +281,10 @@ function ValueProp({
 }): React.JSX.Element {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-none bg-slate-950 text-white">
+      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-none bg-slate-950 text-white sm:mb-6 sm:h-16 sm:w-16">
         {icon}
       </div>
-      <h3 className="mb-3 text-xl font-medium text-slate-950">{title}</h3>
+      <h3 className="mb-2 text-lg font-medium text-slate-950 sm:mb-3 sm:text-xl">{title}</h3>
       <p className="max-w-sm text-sm leading-6 text-slate-500">{description}</p>
     </div>
   );

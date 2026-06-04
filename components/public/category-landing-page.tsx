@@ -52,11 +52,11 @@ export function CategoryLandingPage({
   return (
     <div className="page-shell">
       <section className={`hero-panel overflow-hidden ${accentClassName}`}>
-        <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
+        <div className="grid gap-6 p-5 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
           <div className="space-y-5">
             <div className="space-y-3">
               <p className="page-eyebrow">{eyebrow}</p>
-              <h1 className="max-w-[12ch] text-[clamp(2.5rem,4vw,4.5rem)] font-black tracking-[-0.08em] text-slate-950">
+              <h1 className="max-w-[12ch] text-[clamp(2.2rem,9vw,4.5rem)] font-black tracking-[-0.08em] text-slate-950 sm:text-[clamp(2.5rem,4vw,4.5rem)]">
                 {title}
               </h1>
               <p className="page-description max-w-[56ch]">{description}</p>
@@ -75,14 +75,14 @@ export function CategoryLandingPage({
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href={heroCtaHref}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-none bg-slate-950 px-6 text-[14px] font-bold uppercase tracking-wide text-white transition hover:bg-slate-800"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-none bg-slate-950 px-6 text-[13px] font-bold uppercase tracking-wide text-white transition hover:bg-slate-800 sm:text-[14px]"
               >
                 {heroCtaLabel}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href={secondaryCtaHref}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-none border border-border-strong bg-white px-6 text-[14px] font-bold uppercase tracking-wide text-slate-950 transition hover:bg-slate-50"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-none border border-border-strong bg-white px-6 text-[13px] font-bold uppercase tracking-wide text-slate-950 transition hover:bg-slate-50 sm:text-[14px]"
               >
                 {secondaryCtaLabel}
               </Link>
@@ -91,7 +91,7 @@ export function CategoryLandingPage({
 
           <div className="grid gap-4">
             <Card className="overflow-hidden rounded-none border-border-muted bg-white">
-              <div className="relative aspect-[4/5] bg-slate-100">
+              <div className="relative aspect-[4/5] bg-slate-100 sm:aspect-[4/5]">
                 <Image
                   src={heroImage}
                   alt={heroImageAlt}
@@ -115,10 +115,10 @@ export function CategoryLandingPage({
       </section>
 
       <section className="space-y-4">
-        <div className="flex items-end justify-between gap-4 border-b border-border-muted pb-4">
+        <div className="flex flex-col gap-2 border-b border-border-muted pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
             <p className="page-eyebrow">Featured</p>
-            <h2 className="text-[2rem] font-semibold tracking-[-0.05em] text-slate-950">{sectionTitle}</h2>
+            <h2 className="text-[1.6rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[2rem]">{sectionTitle}</h2>
           </div>
           <p className="hidden max-w-[420px] text-sm text-slate-500 sm:block">{sectionSubtitle}</p>
         </div>
@@ -128,7 +128,7 @@ export function CategoryLandingPage({
             No products available for this selection.
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {visibleProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

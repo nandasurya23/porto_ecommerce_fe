@@ -3,7 +3,7 @@
 import type * as React from "react";
 import { CategoryLandingPage } from "@/components/public/category-landing-page";
 import { ErrorState } from "@/components/ui/error-state";
-import { LoadingState } from "@/components/ui/loading-state";
+import { LoadingCategoryPageSkeleton } from "@/components/ui/loading-skeletons";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useProductsQuery } from "@/features/products/queries";
 
@@ -17,7 +17,7 @@ export default function WomenPage(): React.JSX.Element {
   const products = curatedProducts.length > 0 ? curatedProducts : allProducts;
 
   if (query.isLoading) {
-    return <LoadingState label="Memuat women collection..." />;
+    return <LoadingCategoryPageSkeleton />;
   }
 
   if (query.isError) {

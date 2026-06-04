@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
-import { LoadingState } from "@/components/ui/loading-state";
+import { LoadingProductDetailSkeleton } from "@/components/ui/loading-state";
 import { formatCurrency } from "@/lib/format";
 import { useAddToCartMutation } from "@/features/cart/mutations";
 import { useProductDetailQuery, useProductsQuery } from "@/features/products/queries";
@@ -65,7 +65,7 @@ export default function ProductDetailPage(): React.JSX.Element {
   return (
     <div className="container-shell py-8">
       <div className="page-shell">
-        {query.isLoading ? <LoadingState /> : null}
+        {query.isLoading ? <LoadingProductDetailSkeleton /> : null}
         {query.isError ? <ErrorState message="Gagal memuat detail produk." onRetry={() => void query.refetch()} /> : null}
         {!query.isLoading && !product ? (
           <EmptyState title="Produk tidak ditemukan" description="Slug produk tidak valid." />
@@ -76,7 +76,7 @@ export default function ProductDetailPage(): React.JSX.Element {
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <div className="space-y-3">
-                <div className="relative overflow-hidden rounded-lg border border-border bg-slate-100">
+                <div className="group relative overflow-hidden rounded-lg border border-border bg-slate-100">
                   <div className="relative aspect-[4/3] bg-gradient-to-br from-slate-200 via-white to-slate-100">
                     {activeImage ? (
                       <Image
@@ -96,7 +96,7 @@ export default function ProductDetailPage(): React.JSX.Element {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-2 sm:gap-3">
                   {images.slice(0, 3).map((image, index) => (
                     <button
                       key={image}
@@ -121,11 +121,13 @@ export default function ProductDetailPage(): React.JSX.Element {
               </div>
             </div>
 
-            <div className="lg:col-span-5 lg:sticky lg:top-28 self-start">
+            <div className="self-start lg:col-span-5 lg:sticky lg:top-28">
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <h1 className="text-[clamp(2.2rem,3.2vw,3.4rem)] font-black tracking-[-0.07em] text-slate-950">{product.name}</h1>
-                  <p className="text-[clamp(1.6rem,2vw,2.2rem)] font-bold tracking-[-0.05em] text-slate-950">
+                  <h1 className="text-[clamp(1.9rem,7vw,3.4rem)] font-black tracking-[-0.07em] text-slate-950 sm:text-[clamp(2.2rem,3.2vw,3.4rem)]">
+                    {product.name}
+                  </h1>
+                  <p className="text-[clamp(1.35rem,6vw,2.2rem)] font-bold tracking-[-0.05em] text-slate-950 sm:text-[clamp(1.6rem,2vw,2.2rem)]">
                     {formatCurrency(currentPrice)}
                   </p>
                   <div className="flex flex-wrap items-center gap-3">
@@ -144,7 +146,7 @@ export default function ProductDetailPage(): React.JSX.Element {
                       <span>Color:</span>
                       <span className="text-slate-600">{selectedColor || "Select color"}</span>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 overflow-x-auto pb-1">
                       {colors.map((color) => (
                         <button
                           key={color}
@@ -169,7 +171,7 @@ export default function ProductDetailPage(): React.JSX.Element {
                         Size Guide
                       </Link>
                     </div>
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-4 gap-2 sm:gap-3">
                       {sizes.map((size) => {
                         const variant = product.variants.find((item) => item.color === selectedColor && item.size === size);
                         const disabled = Boolean(variant && variant.stock === 0);
@@ -270,7 +272,7 @@ export default function ProductDetailPage(): React.JSX.Element {
                 </div>
 
                 <div className="overflow-hidden rounded-lg border border-border bg-white">
-                  <div className="flex border-b border-border bg-slate-50">
+                  <div className="flex overflow-x-auto border-b border-border bg-slate-50">
                     <TabButton active={activeTab === "description"} onClick={() => setActiveTab("description")}>
                       Description
                     </TabButton>
@@ -319,7 +321,7 @@ export default function ProductDetailPage(): React.JSX.Element {
             <div className="page-header">
               <div>
                 <p className="page-eyebrow">Related products</p>
-                <h2 className="page-title text-2xl sm:text-3xl">More styles to compare</h2>
+                <h2 className="page-title text-[1.6rem] sm:text-3xl">More styles to compare</h2>
               </div>
               <Link href="/products" className="text-sm font-medium text-fg-muted hover:text-fg">
                 Back to catalog
@@ -398,7 +400,7 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex-1 border-b-2 px-4 py-4 text-sm font-semibold transition ${
+      className={`min-w-[140px] flex-1 whitespace-nowrap border-b-2 px-4 py-4 text-sm font-semibold transition sm:min-w-0 ${
         active
           ? "border-slate-950 bg-white text-slate-950"
           : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-950"

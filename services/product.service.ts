@@ -181,6 +181,12 @@ export function archiveProductRequest(productId: string) {
   });
 }
 
+export function permanentlyDeleteProductRequest(productId: string) {
+  return apiFetch<Record<string, never>>(`${endpoints.adminProducts}/${productId}/permanent`, {
+    method: "DELETE",
+  });
+}
+
 export function uploadProductImageRequest(
   productId: string,
   payload: {

@@ -17,6 +17,7 @@ import { LoadingState } from "@/components/ui/loading-state";
 import {
   useArchiveProductMutation,
   useUpdateProductMutation,
+  usePermanentDeleteProductMutation,
   useUpsertVariantMutation,
   useUploadProductImageMutation,
 } from "@/features/products/mutations";
@@ -52,6 +53,7 @@ export default function EditProductPage(): React.JSX.Element {
   const categoriesQuery = useAdminCategoriesQuery();
   const updateMutation = useUpdateProductMutation();
   const archiveMutation = useArchiveProductMutation();
+  const permanentDeleteMutation = usePermanentDeleteProductMutation();
   const upsertVariantMutation = useUpsertVariantMutation();
   const uploadImageMutation = useUploadProductImageMutation();
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -178,16 +180,42 @@ export default function EditProductPage(): React.JSX.Element {
             onClick={() =>
               archiveMutation.mutate(product.id, {
                 onSuccess: () => {
-                  toast.success("Product archived.");
+                  toast.success("Product moved to archive.");
                   router.push("/admin/products");
                 },
                 onError: (error) => {
-                  toast.error(error instanceof Error ? error.message : "Gagal archive product.");
+                  toast.error(error instanceof Error ? error.message : "Gagal memindahkan product ke archive.");
                 },
               })
             }
           >
-            Archive
+            Move to archive
+          </Button>
+          <Button
+            type="button"
+            variant="danger"
+            onClick={() => {
+              const confirmed = window.confirm(
+                "Delete this product permanently? This will remove the product, its images, variants, cart references, and inventory logs.",
+              );
+
+              if (!confirmed) {
+                return;
+              }
+
+              permanentDeleteMutation.mutate(product.id, {
+                onSuccess: () => {
+                  toast.success("Product permanently deleted.");
+                  router.push("/admin/products");
+                },
+                onError: (error) => {
+                  toast.error(error instanceof Error ? error.message : "Gagal menghapus product secara permanen.");
+                },
+              });
+            }}
+            disabled={permanentDeleteMutation.isPending}
+          >
+            Delete permanently
           </Button>
         </div>
       </form>

@@ -7,8 +7,10 @@ import {
   LayoutDashboard,
   ShoppingBag,
   Heart,
+  LogOut,
   UserRound,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { appName } from "@/constants/theme";
@@ -20,13 +22,82 @@ export function StoreHeader(): React.JSX.Element {
   const user = useAuthStore((state) => state.user);
   const wishlistCount = useWishlistStore((state) => state.items.length);
   const pathname = usePathname();
+  const router = useRouter();
+  const { mutate: logout, isPending } = useLogoutMutation();
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        router.push("/");
+      },
+    });
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-white">
-      <div className="container-shell flex h-14 items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="text-[1.2rem] font-black tracking-[-0.08em] text-slate-950">{appName.toUpperCase()}</span>
-        </Link>
+      <div className="container-shell flex flex-col gap-3 py-3 md:h-16 md:flex-row md:items-center md:justify-between md:gap-4 md:py-0">
+        <div className="flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="text-[1.05rem] font-black tracking-[-0.08em] text-slate-950 sm:text-[1.2rem]">{appName.toUpperCase()}</span>
+          </Link>
+          <div className="flex items-center gap-2 text-slate-950 md:hidden">
+            <IconAction href="/cart" label="Cart">
+              <div className="relative flex items-center justify-center">
+                <ShoppingBag className="h-5 w-5" />
+                <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-orange-600" />
+              </div>
+            </IconAction>
+            <IconAction href="/wishlist" label={`Wishlist${wishlistCount ? ` (${wishlistCount})` : ""}`}>
+              <div className="relative flex items-center justify-center">
+                <Heart className={`h-5 w-5 ${wishlistCount > 0 ? "fill-current" : ""}`} />
+                {wishlistCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-slate-950 px-1 text-[10px] font-bold leading-none text-white">
+                    {wishlistCount}
+                  </span>
+                ) : null}
+              </div>
+            </IconAction>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <IconAction href="/orders" label={user.name}>
+                  <UserRound className="h-5 w-5" />
+                </IconAction>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  disabled={isPending}
+                  className="inline-flex h-9 rounded-full px-3 text-xs font-medium text-slate-700 hover:bg-muted hover:text-slate-950"
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <IconAction href="/login" label="Login">
+                <UserRound className="h-5 w-5" />
+              </IconAction>
+            )}
+          </div>
+        </div>
+        <nav className="flex items-center gap-1 overflow-x-auto pb-1 md:hidden">
+          <MobileHeaderNavLink href="/#new-arrivals" active={pathname === "/"}>
+            New Arrivals
+          </MobileHeaderNavLink>
+          <MobileHeaderNavLink href="/products" active={pathname.startsWith("/products")}>
+            Products
+          </MobileHeaderNavLink>
+          <MobileHeaderNavLink href="/men" active={pathname.startsWith("/men")}>
+            Men
+          </MobileHeaderNavLink>
+          <MobileHeaderNavLink href="/women" active={pathname.startsWith("/women")}>
+            Women
+          </MobileHeaderNavLink>
+          <MobileHeaderNavLink href="/collections" active={pathname.startsWith("/collections")}>
+            Collections
+          </MobileHeaderNavLink>
+        </nav>
         <nav className="hidden items-center gap-1 md:flex">
           <HeaderNavLink href="/#new-arrivals" active={pathname === "/"}>
             New Arrivals
@@ -44,7 +115,7 @@ export function StoreHeader(): React.JSX.Element {
             Collections
           </HeaderNavLink>
         </nav>
-        <div className="flex items-center gap-2 text-slate-950">
+        <div className="hidden items-center gap-2 text-slate-950 md:flex">
           <IconAction href="/cart" label="Cart">
             <div className="relative flex items-center justify-center">
               <ShoppingBag className="h-5 w-5" />
@@ -62,9 +133,22 @@ export function StoreHeader(): React.JSX.Element {
             </div>
           </IconAction>
           {user ? (
-            <IconAction href="/orders" label={user.name}>
-              <UserRound className="h-5 w-5" />
-            </IconAction>
+            <div className="flex items-center gap-2">
+              <IconAction href="/orders" label={user.name}>
+                <UserRound className="h-5 w-5" />
+              </IconAction>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                disabled={isPending}
+                className="inline-flex h-9 rounded-full px-3 text-xs font-medium text-slate-700 hover:bg-muted hover:text-slate-950"
+                aria-label="Logout"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
           ) : (
             <IconAction href="/login" label="Login">
               <UserRound className="h-5 w-5" />
@@ -81,16 +165,18 @@ export function LogoutButton(): React.JSX.Element {
 
   return (
     <Button variant="ghost" size="sm" onClick={() => logout()} disabled={isPending} aria-label="Logout">
-      <UserRound className="h-4 w-4" />
+      <LogOut className="h-4 w-4" />
       Logout
     </Button>
   );
 }
 
 export function StoreFooter(): React.JSX.Element {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="mt-auto w-full bg-slate-950 px-6 py-6 text-white md:px-8 md:py-8">
-      <div className="container-shell flex flex-col items-center justify-between gap-4 md:flex-row">
+    <footer className="mt-auto w-full bg-slate-950 py-6 text-white md:py-8">
+      <div className="container-shell flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
         <div className="text-[1.05rem] font-black tracking-[-0.08em] text-white">SOLE_OPERATIONS</div>
         <nav className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-white/65 md:gap-6">
           <FooterLink href="/products">Terms of Service</FooterLink>
@@ -98,7 +184,7 @@ export function StoreFooter(): React.JSX.Element {
           <FooterLink href="/login">Contact Support</FooterLink>
           <FooterLink href="/warehouse">Global Logistics</FooterLink>
         </nav>
-        <div className="text-xs text-white/45">© 2024 Sole Operations Platform. All rights reserved.</div>
+        <div className="text-xs text-white/45">© {currentYear} Sole Operations Platform. All rights reserved.</div>
       </div>
     </footer>
   );
@@ -138,6 +224,30 @@ export function NavLink({
   );
 }
 
+function MobileHeaderNavLink({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active?: boolean;
+  children: React.ReactNode;
+}): React.JSX.Element {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "shrink-0 rounded-full border px-3 py-2 text-xs font-semibold tracking-[0.02em] transition",
+        active
+          ? "border-slate-950 bg-slate-950 text-white"
+          : "border-border bg-white text-slate-700 hover:border-slate-950 hover:text-slate-950",
+      )}
+    >
+      {children}
+    </Link>
+  );
+}
+
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }): React.JSX.Element {
   return (
     <Link href={href} className="transition hover:text-white">
@@ -151,7 +261,7 @@ function IconAction({ href, label, children }: { href: string; label: string; ch
     <Link
       href={href}
       aria-label={label}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent transition hover:bg-muted"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-transparent transition hover:bg-muted md:h-8 md:w-8"
     >
       {children}
     </Link>

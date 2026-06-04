@@ -6,7 +6,7 @@ import { ArrowRight, Layers3 } from "lucide-react";
 import { CategoryLandingPage } from "@/components/public/category-landing-page";
 import { Card, CardContent } from "@/components/ui/card";
 import { ErrorState } from "@/components/ui/error-state";
-import { LoadingState } from "@/components/ui/loading-state";
+import { LoadingCategoryPageSkeleton } from "@/components/ui/loading-skeletons";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useProductCategoriesQuery, useProductsQuery } from "@/features/products/queries";
 
@@ -18,7 +18,7 @@ export default function CollectionsPage(): React.JSX.Element {
   const categoriesQuery = useProductCategoriesQuery();
 
   if (productsQuery.isLoading || categoriesQuery.isLoading) {
-    return <LoadingState label="Memuat collections..." />;
+    return <LoadingCategoryPageSkeleton />;
   }
 
   if (productsQuery.isError || categoriesQuery.isError) {
