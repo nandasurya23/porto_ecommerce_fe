@@ -75,7 +75,7 @@ export default function LoginPage(): React.JSX.Element {
               type="button"
               className="text-[12px] text-slate-950 transition hover:underline"
             >
-              Forgot password?
+              Forgot passwords?
             </button>
           </div>
           <div className="relative">
